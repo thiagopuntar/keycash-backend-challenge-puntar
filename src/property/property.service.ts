@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePropertyDto } from './dtos/createProperty.dto';
+import { FilterPropertyDto } from './dtos/filterProperty.dto';
 import { UpdatePropertyDto } from './dtos/updateProperty.dto';
 import { PropertyEntity } from './property.entity';
 
@@ -12,8 +13,12 @@ export class PropertyService {
     private propertyRepository: Repository<PropertyEntity>,
   ) {}
 
-  async find(): Promise<PropertyEntity[]> {
-    return this.propertyRepository.find();
+  async find(filterPropertyDto?: FilterPropertyDto): Promise<PropertyEntity[]> {
+    return this.propertyRepository.find({
+      where: {
+        ...filterPropertyDto,
+      },
+    });
   }
 
   async findOne(id: number): Promise<PropertyEntity> {
